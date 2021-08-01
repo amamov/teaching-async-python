@@ -13,6 +13,8 @@
   "[python]": {
     "editor.defaultFormatter": "ms-python.python"
   },
+  "python.languageServer": "Pylance",
+  "python.analysis.typeCheckingMode": "basic",
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
   "python.linting.enabled": true,
