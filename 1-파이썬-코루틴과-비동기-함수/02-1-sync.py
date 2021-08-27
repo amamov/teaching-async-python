@@ -9,13 +9,13 @@ def delivery(name, mealtime):
 
 
 def main():
-    delivery("A", 3)
-    delivery("B", 3)
-    delivery("C", 4)
+    delivery("A", 1)
+    delivery("B", 1)
+    delivery("C", 1)
 
 
 if __name__ == "__main__":
     start = time.time()
-    main()
+    print(main())  # None
     end = time.time()
     print(end - start)
