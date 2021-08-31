@@ -3,7 +3,7 @@ import requests
 
 def io_bound_func():
     result = requests.get("https://google.com")
-    return result.text
+    return result
 
 
 if __name__ == "__main__":
