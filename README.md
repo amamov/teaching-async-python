@@ -4,3 +4,17 @@
 
 - pylance 설치
 - pipenv 설치
+
+## note
+
+> uvicorn app.main:app --reload
+
+- [template](https://fastapi.tiangolo.com/ko/advanced/templates/?h=template)
+
+- mongodb client
+
+  - [mortor](https://motor.readthedocs.io/en/stable/) : async
+
+  - [pymongo](https://pymongo.readthedocs.io/en/stable/) : sync
+
+- [odmantic](https://art049.github.io/odmantic/engine/)

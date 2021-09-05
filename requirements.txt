@@ -1,0 +1,13 @@
+# python 3.8.2
+
+# prod
+aiohttp~=3.7.3
+requests
+
+fastapi
+uvicorn
+aiofiles
+jinja2
+odmantic
+
+# dev

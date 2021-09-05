@@ -8,6 +8,8 @@ import asyncio
 import os
 import threading
 
+urls = ["https://instagram.com"] * 100
+
 
 async def fetch(session, url):
     print(f"{os.getpid()} process | {threading.get_ident()} thread")
@@ -16,12 +18,9 @@ async def fetch(session, url):
 
 
 async def main():
-    urls = ["https://google.com", "https://apple.com", "https://github.com"] * 100
     async with aiohttp.ClientSession() as session:
-        awaitables = [fetch(session, url) for url in urls]
-        await asyncio.gather(*awaitables)
-        # htmls = await asyncio.gather(*awaitables)
-        # print(htmls)
+        results = await asyncio.gather(*[fetch(session, url) for url in urls])
+        print(results)
 
 
 start = time.time()

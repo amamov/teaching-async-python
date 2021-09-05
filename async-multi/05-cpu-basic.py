@@ -2,21 +2,23 @@ import time
 import os
 import threading
 
-nums = [(23784929, 23784923), (63784924, 93784913)] * 5
+nums = [87, 78, 56, 43]
 
 
-def gcd(nums):
+def cpu_bound_func(num):
     print(f"{os.getpid()} process | {threading.get_ident()} thread")
-    num1, num2 = nums
-    min_num = min(num1, num2)
-    for idx in range(min_num, 0, -1):
-        if num1 % idx and num2 % idx == 0:
-            return idx
+    numbers = range(1, num)
+    total = 0
+    for i in numbers:
+        for j in numbers:
+            for k in numbers:
+                for h in numbers:
+                    total *= i * j * k * h
 
 
 def main():
     for num in nums:
-        gcd(num)
+        cpu_bound_func(num)
 
 
 if __name__ == "__main__":

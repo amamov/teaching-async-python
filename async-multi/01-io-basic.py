@@ -8,6 +8,8 @@ import requests
 import os
 import threading
 
+urls = ["https://naver.com", "https://google.com", "https://instagram.com"] * 100
+
 
 def fetch(session, url):
     print(f"{os.getpid()} process | {threading.get_ident()} thread")
@@ -16,11 +18,9 @@ def fetch(session, url):
 
 
 def main():
-    urls = ["https://google.com", "https://apple.com", "https://github.com"] * 100
     with requests.Session() as session:
-        [fetch(session, url) for url in urls]
-        # results = [fetch(session, url) for url in urls]
-        # print(results)
+        results = [fetch(session, url) for url in urls]
+        print(results)
 
 
 start = time.time()
@@ -28,3 +28,5 @@ main()
 end = time.time()
 
 print(end - start)
+
+# 353.2393321990967

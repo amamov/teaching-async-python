@@ -7,30 +7,32 @@ import time
 import requests
 import os
 import threading
-import asyncio
 from concurrent.futures import ThreadPoolExecutor
 
+urls = ["https://naver.com", "https://google.com", "https://instagram.com"] * 100
 
-def fetch(session, url):
-    print(f"{os.getpid()} process | {threading.get_ident()} thread")
+
+def fetch(args):
+    session = args[0]
+    url = args[1]
+    print(f"{os.getpid()} process | {threading.get_ident()} url : {url}")
     with session.get(url) as response:
+        print("hello world")
         return response.text
 
 
-async def main():
-    loop = asyncio.get_event_loop()
+def main():
     executor = ThreadPoolExecutor(max_workers=10)
-    urls = ["https://google.com", "https://apple.com", "https://github.com"] * 100
     with requests.Session() as session:
-        awaitables = [loop.run_in_executor(executor, fetch, session, url) for url in urls]
-        await asyncio.gather(*awaitables)
-        # print(results)
+        params = [(session, url) for url in urls]
+        results = list(executor.map(fetch, params))
+        print(results)
 
 
 if __name__ == "__main__":
     start = time.time()
-    asyncio.run(main())
+    main()
     end = time.time()
     print(end - start)
 
-# 3.4701900482177734
+# 27

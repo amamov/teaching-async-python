@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "shell": "source venv/bin/activate",
+    "start": "python3 start.py"
+  }
+}

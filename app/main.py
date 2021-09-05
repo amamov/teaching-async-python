@@ -1,26 +1,31 @@
-from typing import Optional
+from starlette.middleware.gzip import GZipMiddleware
 from fastapi import FastAPI
-from pydantic import BaseModel
-
-app = FastAPI()
-
-
-class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: Optional[bool] = None
+from fastapi.staticfiles import StaticFiles
+from app import routers
+from app.config import BASE_DIR
+from app.models import mongodb
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+app = FastAPI(title="데이터 수집가", version="0.0.1")
+app.add_middleware(GZipMiddleware, minimum_size=1000)
+app.mount("/static", StaticFiles(directory=BASE_DIR / "statics"), name="static")
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Optional[str] = None):
-    return {"item_id": item_id, "q": q}
+app.include_router(routers.root.router, prefix="", tags=["ROOT"])
+app.include_router(routers.todolist.router, prefix="/api/todolist", tags=["API_TODOLIST"])
 
 
-@app.put("/items/{item_id}")
-def update_item(item_id: int, item: Item):
-    return {"item_name": item.name, "item_id": item_id}
+@app.on_event("startup")
+async def on_app_start():
+    """
+    before app starts
+    """
+    await mongodb.connect()
+
+
+@app.on_event("shutdown")
+async def on_app_shutdown():
+    """
+    after app shutdown
+    """
+    await mongodb.close()

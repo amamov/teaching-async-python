@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="This web site created by yoon-sang-seok"
+    />
+    <title>콜렉터</title>
+    <link href="https://unpkg.com/mvp.css" rel="stylesheet" />
+    <link
+      href="{{ url_for('static', path='css/styles.css') }}"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <h1>콜렉터</h1>
+      <center>
+        <form id="search_form" action="/search">
+          <input
+            type="search"
+            placeholder="keyword"
+            id="search_input"
+            name="q"
+          />
+          <button type="submit">검색</button>
+        </form>
+      </center>
+    </header>
+    <main>
+      {% if result %} {{result}} {% else %} Please Input Keyword... {% endif %}
+    </main>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="{{ url_for('static', path='js/scripts.js') }}"></script>
+  </body>
+</html>
