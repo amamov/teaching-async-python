@@ -1,35 +1,27 @@
-# 코루틴을 사용하여 스크래핑
-# https://github.com/aio-libs/aiohttp
-#  pipenv install aiohttp~=3.7.3
+# pip install aiohttp~=3.7.3
+# pip install beautifulsoup4
 
 import aiohttp
 import asyncio
 from bs4 import BeautifulSoup
-from fake_useragent import UserAgent
 
 
 async def fetch(session, url):
     async with session.get(url) as response:
-        # await asyncio.sleep(3)
         html = await response.text()
         soup = BeautifulSoup(html, features="html.parser")
-        img_list = soup.find_all("img")
-        print(img_list)
+        cont_thumb = soup.find_all("div", "cont_thumb")
+        for cont in cont_thumb:
+            title = cont.find("p", "txt_thumb")
+            if title is not None:
+                print(title.text)
 
 
 async def main():
-
-    urls = [
-        "http://www.yes24.com/searchcorner/Search?keywordAd=&keyword=&Wcode=001_005&query=%b0%ed%be%e7%c0%cc&domain=ALL&page_size=120",
-        "https://www.aladin.co.kr/search/wsearchresult.aspx?SearchTarget=All&SearchWord=%EA%B3%A0%EC%96%91%EC%9D%B4&x=0&y=0",
-    ]
-
-    headers = {
-        "User-Agent": UserAgent().chrome,
-    }
-    async with aiohttp.ClientSession(headers=headers) as session:
-        awaitables = [fetch(session, url) for url in urls]
-        await asyncio.gather(*awaitables)
+    BASE_URL = "https://bjpublic.tistory.com/category/%EC%A0%84%EC%B2%B4%20%EC%B6%9C%EA%B0%84%20%EB%8F%84%EC%84%9C"
+    urls = [f"{BASE_URL}?page={i}" for i in range(1, 10)]
+    async with aiohttp.ClientSession() as session:
+        await asyncio.gather(*[fetch(session, url) for url in urls])
 
 
 if __name__ == "__main__":

@@ -1,7 +1,3 @@
-# 코루틴을 사용하여 스크래핑
-# https://github.com/aio-libs/aiohttp
-#  pipenv install aiohttp~=3.7.3
-
 import aiohttp
 import asyncio
 from config import get_secret
@@ -18,13 +14,11 @@ async def fetch(session, url):
 
 
 async def main():
-
     apis = [
         "https://openapi.naver.com/v1/search/image?query=cat&display=20&start=1",
     ]
     async with aiohttp.ClientSession() as session:
-        awaitables = [fetch(session, api) for api in apis]
-        await asyncio.gather(*awaitables)
+        await asyncio.gather(*[fetch(session, api) for api in apis])
 
 
 if __name__ == "__main__":
