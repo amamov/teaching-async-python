@@ -2,8 +2,8 @@ from odmantic import Model
 
 
 class PhotoModel(Model):
-    username: str
-    message: str
+    keyword: str
+    image_src: str
 
     class Config:
         collection = "photos"

@@ -1,16 +1,12 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
 from app.config import BASE_DIR
 from app.models import mongodb
 from app.scrapers import photo_scraper
 
 
 app = FastAPI(title="데이터 수집가", version="0.0.1")
-app.mount("/statics", StaticFiles(directory=BASE_DIR / "statics"), name="static")
-
-
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 

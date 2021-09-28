@@ -44,13 +44,10 @@ class PhotoScraper:
         for per_page in range(1, total_page):
             apis += self.unit_api(keyword, per_page, size)
 
-        # print(apis)
-
         async with aiohttp.ClientSession() as session:
-            response_tasks = [self.fetch(session, api["url"], api["headers"]) for api in apis]
-            result = await asyncio.gather(*response_tasks)
-            print(result)
-            print(len(apis))
+            result = await asyncio.gather(
+                *[self.fetch(session, api["url"], api["headers"]) for api in apis]
+            )
             return result
 
     def run(self, keyword: str, total_page: int, size: int = 10):
