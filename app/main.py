@@ -1,9 +1,10 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from app.book_scraper import NaverBookScraper
 from app.config import BASE_DIR
 from app.models import mongodb
-from app.scrapers import photo_scraper
+from app.models.book import BookModel
 
 
 app = FastAPI(title="데이터 수집가", version="0.0.1")
@@ -18,12 +19,27 @@ async def root(request: Request):
 
 @app.get("/search", response_class=HTMLResponse)
 async def search_result(request: Request):
-    # print(request)
-    # print(request.query_params)
-    # print(request.query_params.get("q"))
     keyword = request.query_params.get("q")
-    result = await photo_scraper.search(keyword, 50)
-    context = {"request": request, "keyword": keyword, "result": result}
+    if not keyword:
+        context = {"request": request}
+        return templates.TemplateResponse("index.html", context=context)
+    if await mongodb.engine.find_one(BookModel, BookModel.keyword == keyword):
+        books = await mongodb.engine.find(BookModel, BookModel.keyword == keyword)
+        context = {"request": request, "keyword": keyword, "books": books}
+        return templates.TemplateResponse("index.html", context=context)
+    naver_book_scraper = NaverBookScraper()
+    books = await naver_book_scraper.search(keyword, 10)
+    book_models = []
+    for book in books:
+        book_model = BookModel(
+            keyword=keyword,
+            publisher=book["publisher"],
+            price=book["price"],
+            image=book["image"],
+        )
+        book_models.append(book_model)
+    await mongodb.engine.save_all(book_models)
+    context = {"request": request, "keyword": keyword, "books": books}
     return templates.TemplateResponse("index.html", context=context)
 
 

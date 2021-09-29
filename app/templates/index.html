@@ -4,9 +4,16 @@
     <title>콜렉터</title>
     <link href="https://unpkg.com/mvp.css" rel="stylesheet" />
   </head>
+  <style>
+    section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+  </style>
   <body>
     <header>
-      <h1>콜렉터</h1>
+      <h1>콜렉터스 북북이</h1>
       <center>
         <form id="search_form" action="/search">
           <input
@@ -20,10 +27,33 @@
       </center>
     </header>
     <main>
-      {% if result %} {{result}} {% else %}
+      {% if books %}
+      <!--  -->
+      <center>
+        <h3 style="color: gray">{{books|length}}개 데이터 수집..</h3>
+      </center>
+      <section>
+        {% for book in books %}
+        <div>
+          <img src="{{book.image}}" width="150px" height="200px" />
+          <p>
+            {% if book.publisher|length > 10 %}
+            <!--  -->
+            {{book.publisher[:10]}}...
+            <!--  -->
+            {% else %} {{book.publisher}} {% endif %}
+          </p>
+          <p>{{book.price}} 원</p>
+        </div>
+        {% endfor %}
+      </section>
+
+      <hr />
+      {{books}}
+      <!--  -->
+      {% else %}
       <center><h3 style="color: gray">Please Input Keyword...</h3></center>
       {% endif %}
     </main>
-    <!-- <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script> -->
   </body>
 </html>
