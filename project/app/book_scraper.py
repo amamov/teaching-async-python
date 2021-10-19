@@ -1,15 +1,9 @@
-import aiohttp
 import asyncio
+import aiohttp
 from app.config import get_secret
-
-# from config import get_secret
 
 
 class NaverBookScraper:
-
-    """
-    네이버 오픈 API를 이용한 데이터 수집
-    """
 
     NAVER_API_BOOK = "https://openapi.naver.com/v1/search/book"
     NAVER_API_ID = get_secret("NAVER_API_ID")
@@ -22,7 +16,7 @@ class NaverBookScraper:
                 result = await response.json()
                 return result["items"]
 
-    def unit_api(self, keyword, start):
+    def unit_url(self, keyword, start):
         return {
             "url": f"{self.NAVER_API_BOOK}?query={keyword}&display=10&start={start}",
             "headers": {
@@ -32,7 +26,7 @@ class NaverBookScraper:
         }
 
     async def search(self, keyword, total_page):
-        apis = [self.unit_api(keyword, 1 + i * 10) for i in range(total_page)]
+        apis = [self.unit_url(keyword, 1 + i * 10) for i in range(total_page)]
         async with aiohttp.ClientSession() as session:
             all_data = await asyncio.gather(
                 *[NaverBookScraper.fetch(session, api["url"], api["headers"]) for api in apis]
@@ -42,7 +36,6 @@ class NaverBookScraper:
                 if data is not None:
                     for book in data:
                         result.append(book)
-
             return result
 
     def run(self, keyword, total_page):
@@ -51,6 +44,5 @@ class NaverBookScraper:
 
 if __name__ == "__main__":
     scraper = NaverBookScraper()
-    results = scraper.run("파이썬", 10)
-    print(results)
-    print(len(results))
+    print(scraper.run("파이썬", 3))
+    print(len(scraper.run("파이썬", 5)))
