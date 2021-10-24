@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>콜렉터</title>
+    <title>{{title}}</title>
     <link href="https://unpkg.com/mvp.css" rel="stylesheet" />
   </head>
   <style>
@@ -40,6 +40,7 @@
           <img src="{{book.image}}" width="150px" height="200px" />
           <p>
             <!-- 출판사 이름의 문자열 길이가 10을 초과한다면 자른다. -->
+            <!-- len(book['publisher']) -->
             {% if book.publisher|length > 10 %}
             <!--  -->
             {{book.publisher[:10]}}...
