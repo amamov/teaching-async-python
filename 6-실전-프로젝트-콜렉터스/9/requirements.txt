@@ -4,3 +4,4 @@ aiofiles
 jinja2
 odmantic
 pymongo[srv]
+aiohttp # 추가
